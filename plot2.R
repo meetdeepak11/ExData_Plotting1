@@ -2,7 +2,7 @@
 data_full <- read.csv("./exdata-data-household_power_consumption/household_power_consumption.txt", header=T, sep=';', na.strings="?",quote='\"')
 
 
-#Converting Date and Time to desired Format
+#Converting Date to desired Format
 data_full$Date <- as.Date(data_full$Date, format="%d/%m/%Y")
 
 
@@ -10,9 +10,12 @@ data_full$Date <- as.Date(data_full$Date, format="%d/%m/%Y")
 data <- subset(data_full, subset=(Date >= "2007-02-01" & Date <= "2007-02-02"))
 rm(data_full)
 
-## Plot 1
-hist(data$Global_active_power, main="Global Active Power",xlab="Global Active Power (kilowatts)", ylab="Frequency", col="Red")
+## Converting dates
+datetime <- paste(as.Date(data$Date), data$Time)
+data$Datetime <- as.POSIXct(datetime)
 
-## Saving to file
-dev.copy(png, file="plot1.png", height=480, width=480)
+
+## Plot 2
+plot(data$Global_active_power~data$Datetime, type="l",ylab="Global Active Power (kilowatts)", xlab="")
+dev.copy(png, file="plot2.png", height=480, width=480)
 dev.off()
